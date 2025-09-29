@@ -1,0 +1,43 @@
+{
+  "banner": {
+    "title": "Get Market Prices in a Snap!",
+    "subtitle": "Get the latest prices for fresh vegetables and fruits directly from the market."
+  },
+  "latestPrices": {
+    "title": "Latest Market Prices",
+    "subtitle": "Showing Results for: "
+  },
+  "categories": {
+    "title": "Categories"
+  },
+  "avgMarketPrice": {
+    "title": "KALIMATI INDEX – Last 30 Days"
+  },
+  "expensivePrices": {
+    "title": "Today’s Price Leaders"
+  },
+  "cheapestPrices": {
+    "title": "Affordable Choices"
+  },
+  "volatilePrices": {
+    "title": "Most Volatile Items"
+  },
+  "historicalPrices": {
+    "title": "Historical Average Prices Over One Month",
+    "subtitle": " See the price trends for XXX over time"
+  },
+  "Labels": {
+    "min": "Min",
+    "max": "Max",
+    "avg": "Avg",
+    "unit": "Unit",
+    "rs": "Rs.",
+    "item": "Item",
+    "viewAll": "View All"
+  },
+  "days": {
+    "yesterday": "Yesterday",
+    "today": "Today",
+    "change": "Changes"
+  }
+}

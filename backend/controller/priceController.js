@@ -101,31 +101,6 @@ export const getLatestPrices = async (_req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
-export const getPricesByDate = async (req, res) => {
-  try {
-    const { date } = req.query;
-
-    if (!date) {
-      return res
-        .status(400)
-        .json({ message: "Please provide a date in YYYY-MM-DD format." });
-    }
-
-    const rows = await fetchPricesByDate(date);
-
-    if (rows.length === 0) {
-      return res.status(404).json({ message: `No prices found for ${date}` });
-    }
-
-    res.json({
-      date,
-      prices: rows,
-    });
-  } catch (error) {
-    console.error("Error fetching prices by date:", error);
-    res.status(500).json({ message: "Server error", error: error.message });
-  }
-};
 
 export const searchPrices = async (req, res) => {
   try {
@@ -151,6 +126,31 @@ export const searchPrices = async (req, res) => {
     });
   } catch (error) {
     console.error("Error searching prices:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+export const getPricesByDate = async (req, res) => {
+  try {
+    const { date } = req.query;
+
+    if (!date) {
+      return res
+        .status(400)
+        .json({ message: "Please provide a date in YYYY-MM-DD format." });
+    }
+
+    const rows = await fetchPricesByDate(date);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: `No prices found for ${date}` });
+    }
+
+    res.json({
+      date,
+      prices: rows,
+    });
+  } catch (error) {
+    console.error("Error fetching prices by date:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };

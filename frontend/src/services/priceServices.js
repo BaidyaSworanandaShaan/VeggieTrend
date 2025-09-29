@@ -56,13 +56,3 @@ export const getMarketAvgPrice = async () => {
     throw err.response?.data?.message || "Failed to fetch average market price";
   }
 };
-export const getCategories = async () => {
-  try {
-    const response = await axios.get(
-      `${BACKEND_URL}/api/prices/market/average`
-    );
-    return response.data;
-  } catch (err) {
-    throw err.response?.data?.message || "Failed to fetch average market price";
-  }
-};

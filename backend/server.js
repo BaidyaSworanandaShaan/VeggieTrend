@@ -26,12 +26,8 @@ app.use("/api", scraperRoutes);
 app.use("/api", priceRoutes);
 app.use("/api", categoriesRoutes);
 
-// Cron job - run every day at 8 AM
-cron.schedule("0 8 * * *", async () => {
-  console.log("🕗 Running Kalimati scraper at 8 AM...");
-  await runScraper();
-});
-
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`Server running on PORT: ${port}`);
+  console.log("🚀 Running Kalimati scraper on startup...");
+  await runScraper();
 });

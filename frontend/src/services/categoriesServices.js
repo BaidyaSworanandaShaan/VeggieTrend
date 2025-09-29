@@ -13,7 +13,7 @@ export const getItemsByCategories = async (categoryID) => {
     const response = await axios.get(
       `${BACKEND_URL}/api/categories/${categoryID}`
     );
-    console.log(response);
+    console.log("RS", response);
     return response.data;
   } catch (err) {
     throw err.response?.data?.message || "No items by category found";

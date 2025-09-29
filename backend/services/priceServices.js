@@ -7,6 +7,7 @@ export const fetchPriceHistory = async (item) => {
     p.id, 
     p.item, 
     i.image_url, 
+    i.name_ne,
     p.unit, 
     p.min_price, 
     p.max_price, 
@@ -32,6 +33,7 @@ export const fetchLatestPrices = async () => {
     `SELECT 
     p.item, 
     i.image_url, 
+    i.name_ne,
     p.unit, 
     p.min_price, 
     p.max_price, 
@@ -53,7 +55,7 @@ ORDER BY p.item DESC;
 // Fetch prices by a specific date
 export const fetchPricesByDate = async (date) => {
   const [rows] = await pool.execute(
-    `SELECT p.id, p.item, i.image_url, p.unit, p.min_price, p.max_price, p.avg_price, 
+    `SELECT p.id, p.item, i.image_url, i.name_ne, p.unit, p.min_price, p.max_price, p.avg_price, 
             DATE_FORMAT(p.date, '%Y-%m-%d') AS date
      FROM prices p
      LEFT JOIN items i ON p.item_id = i.id
@@ -67,7 +69,7 @@ export const fetchPricesByDate = async (date) => {
 // Search prices by item name
 export const searchPricesByItem = async (item) => {
   const [rows] = await pool.execute(
-    `SELECT p.item, i.image_url, p.unit, p.min_price, p.max_price, p.avg_price, 
+    `SELECT p.item, i.image_url, i.name_ne, p.unit, p.min_price, p.max_price, p.avg_price, 
             DATE_FORMAT(p.date, '%Y-%m-%d') AS date
      FROM prices p
      LEFT JOIN items i ON p.item_id = i.id
@@ -92,7 +94,7 @@ export const fetchMarketAvgPrice = async () => {
 // Fetch prices by date range
 export const fetchPricesByDateRange = async (start, end) => {
   const [rows] = await pool.execute(
-    `SELECT p.item, i.image_url, p.unit, p.min_price, p.max_price, p.avg_price, 
+    `SELECT p.item, i.image_url,  i.name_ne,p.unit, p.min_price, p.max_price, p.avg_price, 
             DATE_FORMAT(p.date, '%Y-%m-%d') AS date
      FROM prices p
      LEFT JOIN items i ON p.item_id = i.id
@@ -107,7 +109,7 @@ export const fetchTopExpensiveItems = async () => {
   const [rows] = await pool.execute(
     `SELECT 
     p.id,
-        p.item, 
+        p.item,  i.name_ne,
         i.image_url, 
         p.unit, 
         p.min_price, 
@@ -126,7 +128,7 @@ export const fetchTopCheapestItems = async () => {
   const [rows] = await pool.execute(
     `SELECT 
     p.id,
-        p.item, 
+        p.item,  i.name_ne,
         i.image_url, 
         p.unit, 
         p.min_price, 
@@ -146,6 +148,7 @@ export const fetchTopVolatileItems = async () => {
     `SELECT 
         p_today.id,
         p_today.item,
+        i.name_ne AS item_ne,
         p_today.unit,
         p_today.avg_price AS today_price,
         p_yesterday.avg_price AS yesterday_price,
@@ -154,6 +157,8 @@ export const fetchTopVolatileItems = async () => {
      JOIN prices p_yesterday 
         ON p_today.item_id = p_yesterday.item_id 
         AND p_yesterday.date = DATE_SUB(p_today.date, INTERVAL 1 DAY)
+     JOIN items i
+        ON p_today.item_id = i.id
      WHERE p_today.date = (SELECT MAX(date) FROM prices)
      ORDER BY ABS(p_today.avg_price - p_yesterday.avg_price) DESC
      LIMIT 5;`

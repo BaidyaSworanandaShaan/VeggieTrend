@@ -3,28 +3,60 @@ import { useItemDetails } from "../../hooks/useItemDetail";
 import { useParams } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import AvgItemPriceChart from "../../components/Charts/AvgItemPriceChart";
-
-const columns = [
-  { field: "item", headerName: "Item", flex: 1 },
-  { field: "unit", headerName: "Unit", flex: 1 },
-  { field: "min_price", headerName: "Min Price", flex: 1 },
-  { field: "max_price", headerName: "Max Price", flex: 1 },
-  { field: "avg_price", headerName: "Avg Price", flex: 1 },
-  { field: "date", headerName: "Date", flex: 1 },
-];
+import { useTranslation } from "react-i18next";
+import NepaliNumber from "../../components/NepaliNumber";
 
 const ItemDetail = () => {
   const { item } = useParams();
   const { data: itemDetail, isLoading, error } = useItemDetails(item);
+  const { t, i18n } = useTranslation();
 
   if (isLoading) return <p className="text-gray-500">Loading...</p>;
   if (error) return <p className="text-red-500">Error: {error.message}</p>;
   if (!itemDetail || itemDetail.length === 0) return <p>No details found.</p>;
-
+  console.log(itemDetail);
   const [firstItem, ...restItems] = itemDetail;
+  const columns = [
+    {
+      field: "item",
+      headerName: t("Labels.item"),
+      flex: 1,
+    },
+    {
+      field: "item_ne",
+      headerName: t("Labels.item"),
+      flex: 1,
+    },
+    { field: "unit", headerName: t("Labels.unit"), flex: 1 },
+    {
+      field: "min_price",
+      headerName: t("Labels.min"),
+      flex: 1,
+      renderCell: (params) => <NepaliNumber value={params.value} />,
+    },
+    {
+      field: "max_price",
+      headerName: t("Labels.max"),
+      flex: 1,
+      renderCell: (params) => <NepaliNumber value={params.value} />,
+    },
+    {
+      field: "avg_price",
+      headerName: t("Labels.avg"),
+      flex: 1,
+      renderCell: (params) => <NepaliNumber value={params.value} />,
+    },
+    {
+      field: "date",
+      headerName: "Date",
+      flex: 1,
+      renderCell: (params) => <NepaliNumber value={params.value} />,
+    },
+  ];
   const rows = restItems.map((p) => ({
     id: p.id,
     item: p.item,
+    item_ne: p.name_ne,
     unit: p.unit || "-",
     min_price: p.min_price || "-",
     max_price: p.max_price || "-",
@@ -38,22 +70,25 @@ const ItemDetail = () => {
                  "
       >
         <div className="flex-1 pr-4">
-          <h3 className="text-2xl font-bold mb-1">{firstItem.item}</h3>
+          <h3 className="text-2xl font-bold mb-1">
+            {i18n.language === "ne" ? firstItem.name_ne : firstItem.item}
+          </h3>
           <p className="text-gray-600 text-md mb-0.5">
-            <span className="font-semibold">Unit:</span> {firstItem.unit || "-"}
+            <span className="font-semibold">{t("Labels.unit")}:</span>{" "}
+            {firstItem.unit || "-"}
           </p>
           <div className="flex gap-4">
             <p className="text-gray-600 text-md mb-0.5">
-              <span className="font-semibold">Min:</span>{" "}
-              {firstItem.min_price || "-"}
+              <span className="font-semibold">{t("Labels.min")}:</span>{" "}
+              {<NepaliNumber value={firstItem.min_price} /> || "-"}
             </p>
             <p className="text-gray-600 text-md mb-0.5">
-              <span className="font-semibold">Max:</span>{" "}
-              {firstItem.max_price || "-"}
+              <span className="font-semibold">{t("Labels.max")}:</span>{" "}
+              {<NepaliNumber value={firstItem.max_price} /> || "-"}
             </p>
             <p className="text-gray-600 text-md">
-              <span className="font-semibold">Avg:</span>{" "}
-              {firstItem.avg_price || "-"}
+              <span className="font-semibold">{t("Labels.avg")}:</span>{" "}
+              {<NepaliNumber value={firstItem.avg_price} /> || "-"}
             </p>
           </div>
         </div>
@@ -71,13 +106,14 @@ const ItemDetail = () => {
       </div>
       <div className="title">
         <h2 className="text-2xl font-bold text-gray-900">
-          Historical Average Prices Over One Month
+          {t("historicalPrices.title")}
         </h2>
         <p className="text-gray-600 mt-1">
           {" "}
-          See the price trends for{" "}
-          <span className="font-bold underline">{firstItem.item}</span> over
-          time
+          {t("historicalPrices.subtitle").replace(
+            "XXX",
+            i18n.language === "ne" ? firstItem.name_ne : firstItem.item
+          )}
         </p>
       </div>
       <AvgItemPriceChart data={itemDetail} />

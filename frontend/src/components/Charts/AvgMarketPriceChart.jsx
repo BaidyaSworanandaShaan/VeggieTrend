@@ -9,10 +9,11 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useMarketAvgPrice } from "../../hooks/useMarketAvgPrice";
+import { useTranslation } from "react-i18next";
 
 const AvgMarketPriceChart = () => {
   const { data, isLoading, isError, error } = useMarketAvgPrice();
-
+  const { t } = useTranslation();
   if (isLoading) return <p>Loading market average...</p>;
   if (isError) return <p className="text-red-500">{error?.message}</p>;
 
@@ -23,7 +24,7 @@ const AvgMarketPriceChart = () => {
           <div className="flex justify-between items-center">
             <div className="title">
               <h2 className="text-2xl font-bold text-gray-900">
-                KALIMATI INDEX – Last 30 Days
+                {t("avgMarketPrice.title")}
               </h2>
             </div>
           </div>

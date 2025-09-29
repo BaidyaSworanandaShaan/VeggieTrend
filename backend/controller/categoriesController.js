@@ -27,11 +27,13 @@ export const getItemByCategories = async (req, res) => {
     }
 
     const categoryName = rows.length ? rows[0].category_name : null;
+    const categoryNameNe = rows.length ? rows[0].category_name_ne : null;
 
     res.status(200).json({
       category: {
         id: categoryId,
         name: categoryName,
+        name_ne: categoryNameNe,
       },
       items: rows,
     });

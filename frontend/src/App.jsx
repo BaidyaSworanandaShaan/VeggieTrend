@@ -3,22 +3,26 @@ import Home from "./pages/Home/Home";
 import AllPrice from "./pages/AllPrice/AllPrice";
 import ItemDetail from "./pages/ItemDetail/ItemDetail";
 import CategoriesDetail from "./pages/CategoriesDetail/CategoriesDetail";
+import MainLayout from "./MainLayout";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/prices",
+    element: <MainLayout />,
     children: [
-      { path: "all", element: <AllPrice /> },
-      { path: ":item", element: <ItemDetail /> },
+      { path: "/", element: <Home /> },
+      {
+        path: "/prices",
+        children: [
+          { path: "all", element: <AllPrice /> },
+          { path: ":item", element: <ItemDetail /> },
+        ],
+      },
+      {
+        path: "/categories",
+        children: [{ path: ":id", element: <CategoriesDetail /> }],
+      },
     ],
-  },
-  {
-    path: "/categories",
-    children: [{ path: ":id", element: <CategoriesDetail /> }],
   },
 ]);
 function App() {

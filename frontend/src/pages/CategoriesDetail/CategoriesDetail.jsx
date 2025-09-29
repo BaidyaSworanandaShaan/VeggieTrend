@@ -2,12 +2,13 @@ import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useItemByCategories } from "../../hooks/useCategories";
 import PriceCard from "../../components/PriceCard";
+import { useTranslation } from "react-i18next";
 
 const CategoriesDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data, isLoading, error } = useItemByCategories(id);
-
+  const { i18n } = useTranslation();
   if (isLoading) return <p className="text-gray-500">Loading...</p>;
   if (error) return <p className="text-red-500">Error: {error.message}</p>;
 
@@ -17,7 +18,10 @@ const CategoriesDetail = () => {
         <div className="flex justify-between items-center">
           <div className="title">
             <h2 className="text-2xl font-bold text-gray-900">
-              {data.category.name} Items
+              {i18n.language === "ne"
+                ? data.category.name_ne
+                : data.category.name}{" "}
+              Items
             </h2>
             <p className="text-gray-600 mt-1">
               Browse all items under the{" "}
@@ -38,7 +42,10 @@ const CategoriesDetail = () => {
             className="bg-white shadow-sm border rounded-lg p-4 flex justify-between items-center
                  transform transition duration-200 hover:scale-105 hover:shadow-sm cursor-pointer"
           >
-            <span className="text-lg font-bold mb-1">{price.name}</span>{" "}
+            <span className="text-lg font-bold mb-1">
+              {" "}
+              {i18n.language === "ne" ? price.name_ne : price.name}
+            </span>{" "}
             <div className="w-16 h-16 flex-shrink-0">
               <img
                 src={

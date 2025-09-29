@@ -2,10 +2,12 @@ import React from "react";
 import { useLatestPrice } from "../../hooks/useLatestPrice";
 import PriceCard from "../PriceCard";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import NepaliNumber from "../NepaliNumber";
 
 const LatestPrices = () => {
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
   const { data, isLoading, isError, error } = useLatestPrice();
 
   if (isLoading) return <p>Loading latest prices...</p>;
@@ -18,18 +20,21 @@ const LatestPrices = () => {
         <div className="flex justify-between items-center">
           <div className="title">
             <h2 className="text-2xl font-bold text-gray-900">
-              Latest Market Prices
+              {t("latestPrices.title")}
             </h2>
             <p className="text-gray-600 mt-1">
-              Showing prices for{" "}
-              <span className="font-medium">{data.date}</span>
+              {t("latestPrices.subtitle")}
+              <span className="font-medium">
+                {" "}
+                {<NepaliNumber value={data.date} /> || "-"}
+              </span>
             </p>
           </div>
           <button
             className="btn-primary"
             onClick={() => navigate("/prices/all")}
           >
-            View All
+            {t("Labels.viewAll")}
           </button>
         </div>
       </div>

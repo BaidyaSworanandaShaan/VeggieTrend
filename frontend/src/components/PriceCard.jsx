@@ -1,8 +1,12 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import NepaliNumber from "./NepaliNumber";
 
 const PriceCard = ({ price }) => {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  console.log(price);
   return (
     <div
       key={price.id}
@@ -11,19 +15,25 @@ const PriceCard = ({ price }) => {
                  transform transition duration-200 hover:scale-105 hover:shadow-sm cursor-pointer"
     >
       <div className="flex-1 pr-4">
-        <h3 className="text-lg font-bold mb-1">{price.item}</h3>
+        <h3 className="text-lg font-bold mb-1">
+          {i18n.language === "ne" ? price.name_ne : price.item}
+        </h3>
         <p className="text-gray-600 text-md mb-0.5">
-          <span className="font-semibold">Unit:</span> {price.unit || "-"}
+          <span className="font-semibold"> {t("Labels.unit")}: </span>{" "}
+          {price.unit || "-"}
         </p>
         <div className="flex gap-4">
           <p className="text-gray-600 text-md mb-0.5">
-            <span className="font-semibold">Min:</span> {price.min_price || "-"}
+            <span className="font-semibold">{t("Labels.min")}:</span>{" "}
+            {<NepaliNumber value={price.min_price} /> || "-"}
           </p>
           <p className="text-gray-600 text-md mb-0.5">
-            <span className="font-semibold">Max:</span> {price.max_price || "-"}
+            <span className="font-semibold">{t("Labels.max")}:</span>{" "}
+            {<NepaliNumber value={price.max_price} /> || "-"}
           </p>
           <p className="text-gray-600 text-md">
-            <span className="font-semibold">Avg:</span> {price.avg_price || "-"}
+            <span className="font-semibold">{t("Labels.avg")}:</span>{" "}
+            {<NepaliNumber value={price.avg_price} /> || "-"}
           </p>
         </div>
       </div>
